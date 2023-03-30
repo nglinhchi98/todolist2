@@ -12,6 +12,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import 'dayjs/locale/en-gb';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 function Todolist() {
   const [todo, setTodo] = useState({description: '', date: '', priority:''});
@@ -100,8 +101,8 @@ function Todolist() {
                 name="priority" value={todo.priority}
                 onChange={inputChanged} />
 
-              <Button onClick={addTodo} variant="contained">Add</Button>
-              <Button onClick={deleteTodo} variant = "contained">Delete</Button>
+              <Button onClick={addTodo} variant="outlined">Add</Button>
+              <Button onClick={deleteTodo} variant = "outlined" color="error">Delete<DeleteIcon /></Button>
             </Stack> 
             <div className='ag-theme-material'
             style = {{height: '700px', width: '70%'}}>
