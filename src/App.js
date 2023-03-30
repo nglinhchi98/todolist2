@@ -10,12 +10,15 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import 'dayjs/locale/en-gb';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
 function Todolist() {
   const [todo, setTodo] = useState({description: '', date: '', priority:''});
   const [todos, setTodos] = useState([]);
   const gridRef = useRef();
-
+  const [value, setValue] = useState('one');
+  
   const inputChanged = (event) => {
     setTodo({...todo, [event.target.name]: event.target.value});
   }
@@ -61,53 +64,61 @@ function Todolist() {
     }
   };
 
+  const handleChange = (event, value) => {
+    setValue(value);
+  }
+
   return (
     <div>
-      <div className='search-area'>
-        <h5>Todo List</h5>
-        <Stack direction="row" spacing={2}>
-          <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-gb">
-            <DatePicker
-              label="Date"
-              variant="standard"
-              name="date" value={todo.date}
-              onChange={handleDate}
-               /> 
-          </LocalizationProvider>
+      <Tabs value={value} onChange={handleChange}>
+            <Tab value="one" label="HOME" />
+            <Tab value="two" label="TODOS" />
+        </Tabs>
+        {value === 'one' && (<div> <h2>Welcome to the todo app!</h2></div>)}
+        {value === 'two' && ( 
+          <div>
+            <h5>Todo List</h5>
+            <Stack direction="row" spacing={2}>
+              <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-gb">
+                <DatePicker
+                  label="Date"
+                  variant="standard"
+                  name="date" value={todo.date}
+                  onChange={handleDate}
+                  /> 
+              </LocalizationProvider>
 
-          <TextField
-            label="Description"
-            variant="standard"
-            name="description" value={todo.description}
-            onChange={inputChanged} />
+              <TextField
+                label="Description"
+                variant="standard"
+                name="description" value={todo.description}
+                onChange={inputChanged} />
 
-          <TextField
-            label="Priority"
-            variant="standard"
-            name="priority" value={todo.priority}
-            onChange={inputChanged} />
+              <TextField
+                label="Priority"
+                variant="standard"
+                name="priority" value={todo.priority}
+                onChange={inputChanged} />
 
-          <Button onClick={addTodo} variant="contained">Add</Button>
-          <Button onClick={deleteTodo} variant = "contained">Delete</Button>
-        </Stack>
-      </div>
-
-      <div className='ag-theme-material'
+              <Button onClick={addTodo} variant="contained">Add</Button>
+              <Button onClick={deleteTodo} variant = "contained">Delete</Button>
+            </Stack> 
+            <div className='ag-theme-material'
             style = {{height: '700px', width: '70%'}}>
-          <AgGridReact
-            ref = {gridRef}
-            onGridReady={ params => gridRef.current = params.api }
-            rowSelection='single'
-            columnDefs={columns}
-            rowData={todos}
-            animateRows={true}
-            defaultColDef={{filter:true, floatingFilter:true}}>
-          </AgGridReact>
-
+              <AgGridReact
+                ref = {gridRef}
+                onGridReady={ params => gridRef.current = params.api }
+                rowSelection='single'
+                columnDefs={columns}
+                rowData={todos}
+                animateRows={true}
+                defaultColDef={{filter:true, floatingFilter:true}}>
+              </AgGridReact> 
+            </div>
+          </div> )}
       </div>
-
-    </div>
   );
 };
 
 export default Todolist;
+
